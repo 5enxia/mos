@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<stdbool.h>
 
 #include<unistd.h>
 
@@ -13,7 +14,7 @@ void input();
 int main(int argc, const char *argv[])
 {
     init();
-    while (1) {
+    while (true) {
         printLine();
         input();
     }
