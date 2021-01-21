@@ -52,5 +52,5 @@ Mkfile.old
 dkms.conf
 
 # mos
-mos
-x
+mosh
+x/

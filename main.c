@@ -7,6 +7,7 @@
 #include<readline/readline.h>
 
 #include"package/parser.h"
+#include"package/exec.h"
 
 const int MAXLENGTH = 1024;
 
@@ -29,7 +30,8 @@ int main()
         readLine(input);
         // printf("%s\n", input);
         isPiped = parseLine(input, parsed);
-        printf("%d\n", isPiped);
+        // printf("%d\n", isPiped);
+        execLine(parsed[0]);
     }
     return 0;
 }
@@ -38,7 +40,7 @@ int main()
 // change dir home
 void init() {
     clear();
-    printf("mos: my own shell\n");
+    printf("mosh: my own shell\n");
     char* home = getenv("HOME");
     chdir(home);
 }
