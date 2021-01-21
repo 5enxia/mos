@@ -4,12 +4,11 @@
 
 #include<unistd.h>
 
-#include<readline/readline.h>
-
 #include"package/parser.h"
 #include"package/exec.h"
 
 const int MAXLENGTH = 1024;
+const char* INITIAL_MESSAGE = "mosh: my own shell\n";
 
 void init();
 void clear();
@@ -31,7 +30,11 @@ int main()
         // printf("%s\n", input);
         isPiped = parseLine(input, parsed);
         // printf("%d\n", isPiped);
-        execLine(parsed[0]);
+        if (isPiped) {
+            execLine(parsed[0]);
+        } else {
+            execLine(parsed[0]);
+        }
     }
     return 0;
 }
@@ -40,7 +43,7 @@ int main()
 // change dir home
 void init() {
     clear();
-    printf("mosh: my own shell\n");
+    printf("%s", INITIAL_MESSAGE);
     char* home = getenv("HOME");
     chdir(home);
 }
@@ -56,11 +59,12 @@ void printLine() {
     char* hostname = getenv("HOSTNAME");
     char cwd[1024];
     getcwd(cwd, sizeof(cwd));
-    printf("%s>%s>%s>", user, hostname, cwd);
+    printf("%s>%s>%s>$>", user, hostname, cwd);
 }
 
 // user input
 void readLine(char *input) {
-    char *buf = readline("$>");
-    strcpy(input, buf);
+    fgets(input, sizeof(input), stdin);
+    char *ln = strchr(input, '\n');
+    if (ln) *ln = '\0';
 }
