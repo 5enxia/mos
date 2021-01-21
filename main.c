@@ -1,23 +1,36 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
 #include<unistd.h>
 
 #include<readline/readline.h>
 
+#include"package/parser.h"
+
+const int MAXLENGTH = 1024;
+
 void init();
 void clear();
 void printLine();
-void input();
+void readLine(char *input);
 
-int main(int argc, const char *argv[])
+int main()
 {
+    char input[MAXLENGTH];
+    char** parsed[2];
+    for (int i = 0; i < 2; i++) {
+        parsed[i] = malloc(MAXARGS * sizeof(char*));
+    }
+    int isPiped = 0;
     init();
     while (1) {
         printLine();
-        input();
+        readLine(input);
+        // printf("%s\n", input);
+        isPiped = parseLine(input, parsed);
+        printf("%d\n", isPiped);
     }
-    printLine();
     return 0;
 }
 
@@ -45,7 +58,7 @@ void printLine() {
 }
 
 // user input
-void input() {
-    char *buf;
-    buf = readline("$>");
+void readLine(char *input) {
+    char *buf = readline("$>");
+    strcpy(input, buf);
 }
