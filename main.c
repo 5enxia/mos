@@ -24,7 +24,7 @@ int main()
     }
     int isPiped = 0;
     init();
-    while (true) {
+    while (1) {
         printLine();
         readLine(input);
         // printf("%s\n", input);
