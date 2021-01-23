@@ -1,17 +1,32 @@
+#include<string.h>
 #include<unistd.h>
 
 #include<sys/wait.h>
 
 // exec input command & args
 void execLine(char **parsed) {
-    pid_t pid = fork();
-    if (pid == 0) { // child process
-        if (execvp(parsed[0], parsed) < 0) {
-            printf("Could not exec the command\n");
-        }
-        exit(0);
-    } else {
-        wait(NULL); // wait child process end
+    pid_t pid;
+    int value = 0;
+    if (!strcmp(parsed[0], "exit")) value = 1;
+    else if (!strcmp(parsed[0], "cd")) value = 2;
+    switch (value) {
+        case 1:
+            exit(0);
+            break;
+        case 2:
+            chdir(parsed[1]);
+            break;
+        default:
+            pid = fork();
+            if (pid == 0) { // child process
+                if (execvp(parsed[0], parsed) < 0) {
+                    printf("Could not exec the command\n");
+                }
+                exit(0);
+            } else {
+                wait(NULL); // wait child process end
+            }
+            break;
     }
 }
 

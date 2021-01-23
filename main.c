@@ -24,13 +24,11 @@ int main()
     for (int i = 0; i < 2; i++) {
         parsed[i] = malloc(MAXARGS * sizeof(char*));
     }
-    int isPiped = 0;
     init();
     while (1) {
         printLine();
         readLine(input);
-        isPiped = parseLine(input, parsed);
-        // printf("%d\n", isPiped);
+        int isPiped = parseLine(input, parsed);
         if (isPiped) {
             execPipeline(parsed);
         } else {
