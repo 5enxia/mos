@@ -4,6 +4,8 @@
 
 #include<unistd.h>
 
+#include <readline/readline.h>
+
 #include"package/parser.h"
 #include"package/exec.h"
 
@@ -27,11 +29,10 @@ int main()
     while (1) {
         printLine();
         readLine(input);
-        // printf("%s\n", input);
         isPiped = parseLine(input, parsed);
         // printf("%d\n", isPiped);
         if (isPiped) {
-            execLine(parsed[0]);
+            execPipeline(parsed);
         } else {
             execLine(parsed[0]);
         }
@@ -39,32 +40,33 @@ int main()
     return 0;
 }
 
-// init screen
-// change dir home
 void init() {
-    clear();
+    clear(); // init screen
     printf("%s", INITIAL_MESSAGE);
     char* home = getenv("HOME");
-    chdir(home);
+    chdir(home); // change dir home
 }
 
-// init screen
 void clear() {
-    printf("\033[H\033[J");
+    printf("\033[H\033[J"); // Refresh Control Code
 }
 
-// print username. hostname, cwd
+
 void printLine() {
-    char* user = getenv("USER");
-    char* hostname = getenv("HOSTNAME");
+    char* user = getenv("USER"); // username
+    char* hostname = getenv("HOSTNAME"); // hostname
     char cwd[1024];
-    getcwd(cwd, sizeof(cwd));
-    printf("%s>%s>%s>$>", user, hostname, cwd);
+    getcwd(cwd, sizeof(cwd)); // cwd
+    // printf("%s>%s>%s>$>", user, hostname, cwd);
+    printf("%s>%s>%s>", user, hostname, cwd);
 }
 
-// user input
+
 void readLine(char *input) {
-    fgets(input, sizeof(input), stdin);
-    char *ln = strchr(input, '\n');
-    if (ln) *ln = '\0';
+    char* buf;
+    buf = readline("$>");
+    strcpy(input, buf);
+    // fgets(input, sizeof(input), stdin); // input
+    // char *ln = strchr(input, '\n');
+    // if (ln) *ln = '\0';
 }
