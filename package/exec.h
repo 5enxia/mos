@@ -15,6 +15,22 @@ void execLine(char **parsed) {
     }
 }
 
+void execPipedChild(char ***parsed, int *fd, int i) {
+    if (i == 0) {
+        close(fd[0]);
+        dup2(fd[1], STDOUT_FILENO); // REPLECATE stdout
+        close(fd[1]);
+    } else {
+        close(fd[1]);
+        dup2(fd[0], STDIN_FILENO); // REPLECATE stdout
+        close(fd[0]);
+    }
+    if (execvp(parsed[i][0], parsed[i]) < 0) {
+        printf("Child:%d->Could not exec the command\n", i);
+        exit(0);
+    }
+}
+
 void execPipeline(char ***parsed) {
     int fd[2]; // 0:read, 1:write
     pid_t pid[2];
@@ -31,27 +47,15 @@ void execPipeline(char ***parsed) {
     }
 
     if (pid[0] == 0) { // child 0
-        close(fd[0]);
-        dup2(fd[1], STDOUT_FILENO); // REPLECATE stdout
-        close(fd[1]);
-        if (execvp(parsed[0][0], parsed[0]) < 0) {
-            printf("Child:0->Could not exec the command\n");
-            exit(0);
-        }
-    } else { // paren
+        execPipedChild(parsed, fd, 0);
+    } else { // parent
         pid[1] = fork();
         if (pid[1] < 0) { // error
             printf("Child:1->Could not fork\n");
             return;
         }
         if (pid[1] == 0) { // child 1
-            close(fd[1]);
-            dup2(fd[0], STDIN_FILENO); // REPLECATE stdout
-            close(fd[0]);
-            if (execvp(parsed[1][0], parsed[1]) < 0) {
-                printf("Child:1->Could not exec the command\n");
-                exit(0);
-            }
+            execPipedChild(parsed, fd, 1);
         } else {
             wait(NULL);
             wait(NULL);
