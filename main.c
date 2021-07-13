@@ -52,7 +52,8 @@ void clear() {
 
 void printLine() {
     char* user = getenv("USER"); // username
-    char* hostname = getenv("HOSTNAME"); // hostname
+    char hostname[64];
+    gethostname(hostname, sizeof(hostname));
     char cwd[1024];
     getcwd(cwd, sizeof(cwd)); // cwd
     // printf("%s>%s>%s>$>", user, hostname, cwd);
