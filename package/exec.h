@@ -7,9 +7,12 @@
 void execLine(char **parsed) {
     pid_t pid;
     int value = 0;
-    if (!strcmp(parsed[0], "exit")) value = 1;
+    if (!strcmp(parsed[0], "\n")) value = 0;
+    else if (!strcmp(parsed[0], "exit")) value = 1;
     else if (!strcmp(parsed[0], "cd")) value = 2;
     switch (value) {
+        case 0:
+            break;
         case 1:
             exit(0);
             break;

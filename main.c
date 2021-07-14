@@ -56,7 +56,6 @@ void printLine() {
     gethostname(hostname, sizeof(hostname));
     char cwd[1024];
     getcwd(cwd, sizeof(cwd)); // cwd
-    // printf("%s>%s>%s>$>", user, hostname, cwd);
     printf("%s>%s>%s>", user, hostname, cwd);
 }
 
@@ -64,8 +63,10 @@ void printLine() {
 void readLine(char *input) {
     char* buf;
     buf = readline("$>");
+    if (strcmp(buf, "") == 0) buf = "\n";
     strcpy(input, buf);
+
     // fgets(input, sizeof(input), stdin); // input
     // char *ln = strchr(input, '\n');
-    // if (ln) *ln = '\0';
+    // char *ln = '\0';
 }
