@@ -63,7 +63,6 @@ void printLine() {
 void readLine(char *input) {
     char* buf;
     buf = readline("$>");
-    if (strcmp(buf, "") == 0) buf = "\n";
     strcpy(input, buf);
 
     // fgets(input, sizeof(input), stdin); // input
